@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">AdditionAndWrite</string>
+    <string name="slide_1_title">Title 1</string>
+    <string name="slide_1_description">First of all, if you do not have an account, you must create an account, you have three different options for this. These are Email and password, Google account and Facebook account.</string>
+
+    <string name="slide_2_title">Title 2</string>
+    <string name="slide_2_description">There is a start button on the screen that welcomes you after the start, the highest score and a ranking according to the score received by all people playing the game. You can start the game with the start button.</string>
+
+    <string name="slide_3_title">Title 3</string>
+    <string name="slide_3_description">You must sum the numbers appearing and after the time is up, you must write the result. If the result is correct, you will level up and get points. If the result is not correct, you will see the correct answer.</string>
+
+    <string name="slide_4_title">Title 4</string>
+    <string name="slide_4_description">if everything is ok, Let\'s start.</string>
+
+    <string name="skip">skip</string>
+    <string name="next">next</string>
+    <string name="start">start</string>
+
+    <string name="my_preference">"com.omurgun.XYXY"</string>
+    <string name="my_preference_key">"com.omurgun.com.XYXYKey"</string>
+    <string name="welcome_text">WELCOME</string>
+
+    <string name="home_name">Home</string>
+    <string name="top_list">Top List</string>
+    <string name="show_top_list">Show Top List</string>
+
+    <string name="create_account">Sıgn up</string>
+    <string name="new_create_account">Create new account</string>
+    <string name="i_have_account">Sıgn ın</string>
+    <string name="have_account">login with your account</string>
+    <string name="create_new_account">create Account</string>
+
+    <string name="password">Password...</string>
+    <string name="email">Email...</string>
+    <string name="username">Username...</string>
+    <string name="register_menu">Register Menu</string>
+
+    <string name="game_start">Start</string>
+    <string name="username_continue">Contınue</string>
+
+    <string name="register_email">Emaıl And Password</string>
+    <string name="register_google">Google</string>
+    <string name="register_facebook">Facebook</string>
+
+    <string name="facebook_app_id">582737582679965</string>
+    <string name="fb_login_protocol_scheme">fb582737582679965</string>
+</resources>

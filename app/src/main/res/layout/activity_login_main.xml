@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterAndLogin.LoginMainActivity"
+
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:theme="@style/ThemeOverlay.MaterialComponents"
+        tools:ignore="MissingConstraints">
+
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
+            >
+        </androidx.appcompat.widget.Toolbar>
+
+
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/ripple_effect_raise"
+        android:text="@string/new_create_account"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btnLogin"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+    <TextView
+
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="@string/i_have_account"
+        android:textColor="@android:color/black"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:drawableStart="@drawable/password"
+        android:padding="10dp"
+        android:inputType="textPassword"
+        android:id="@+id/passwordtxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailtxt"
+        android:layout_marginTop="20dp"
+        android:hint="@string/password"
+        android:background="@drawable/inputs"
+        app:layout_constraintEnd_toEndOf="@+id/emailtxt"
+        app:layout_constraintStart_toStartOf="@+id/emailtxt"
+        app:layout_constraintTop_toBottomOf="@+id/emailtxt" />
+
+    <EditText
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:drawableStart="@drawable/mail"
+        android:padding="10dp"
+        android:id="@+id/emailtxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appName"
+        android:layout_marginTop="60dp"
+        android:hint="@string/email"
+        android:background="@drawable/inputs"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/appName"
+        app:layout_constraintStart_toStartOf="@+id/appName"
+        app:layout_constraintTop_toBottomOf="@+id/appName" />
+
+    <Button
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ripple_effect_raise"
+        android:text="@string/i_have_account"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/passwordtxt"
+        app:layout_constraintStart_toStartOf="@+id/passwordtxt"
+        app:layout_constraintTop_toBottomOf="@+id/passwordtxt" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
