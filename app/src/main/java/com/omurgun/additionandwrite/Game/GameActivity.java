@@ -12,11 +12,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +41,7 @@ import java.util.Random;
 
 
 public class GameActivity extends AppCompatActivity implements ExampleDialogListener {
+
     private SharedPreferences sharedPreferences;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -61,19 +74,35 @@ public class GameActivity extends AppCompatActivity implements ExampleDialogList
 
     private MediaPlayer playerInGame;
     private int pauseMusicPosition;
+    private ImageView heart_1,heart_2,heart_3;
+    private ImageView heart_1_free,heart_2_free,heart_3_free;
+    private int heart;
+    private AdView adView;
+    private InterstitialAd mInterstitialAd;
+    private RewardedAd rewardedAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         init();
-        if (Build.VERSION.SDK_INT >= 19) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
+        translucentStatusBarFlag();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        bannerAds();
+        InterstitialAds();
+        rewardedAds();
+
         sharedPreferences = this.getSharedPreferences("com.omurgun.additionandwrite", Context.MODE_PRIVATE);
         maxScore = sharedPreferences.getInt("maxScore", 0);
+        //sharedPreferences.edit().remove("heart").commit();
+        heart = sharedPreferences.getInt("heart",3);
+
+        System.out.println("heart = "+heart);
+        heartShow(heart);
         musicPlay();
         hideImages();
         score = 0;
@@ -125,6 +154,15 @@ public class GameActivity extends AppCompatActivity implements ExampleDialogList
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         playerInGame = MediaPlayer.create(GameActivity.this,R.raw.songgame);
+        adView = findViewById(R.id.adView);
+        heart_1 = findViewById(R.id.heart_1_image);
+        heart_2 = findViewById(R.id.heart_2_image);
+        heart_3 = findViewById(R.id.heart_3_image);
+        heart_1_free = findViewById(R.id.heart_1_image_free);
+        heart_2_free = findViewById(R.id.heart_2_image_free);
+        heart_3_free = findViewById(R.id.heart_3_image_free);
+
+
     }
     private void increaseScore () {
         score = score +level*5;
@@ -224,39 +262,65 @@ public class GameActivity extends AppCompatActivity implements ExampleDialogList
         }
         else
         {
+            gameHeartReduce();
+            System.out.println("heart == 0 " + heart);
+
             saveMaxScore();
             Toast.makeText(GameActivity.this, "True result : "+sum, Toast.LENGTH_SHORT).show();
-            AlertDialog.Builder alert = new AlertDialog.Builder(GameActivity.this);
-            alert.setTitle("Restart?");
-            alert.setMessage("Are you sure to restart game?");
-            alert.setCancelable(false);
-            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            AlertDialog.Builder alertEarnHeart = new AlertDialog.Builder(GameActivity.this);
+            alertEarnHeart.setTitle("Earn Heart");
+            alertEarnHeart.setMessage("Do you want to earn heart?");
+            alertEarnHeart.setCancelable(false);
+            alertEarnHeart.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    Toast.makeText(GameActivity.this, "MAX PUAN : "+score, Toast.LENGTH_SHORT).show();
-                    //restart
-                    Intent intent = getIntent();
-                    musicStop();
-                    startActivity(intent);
-                    finish();
+                    seeRewardedAds();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(GameActivity.this);
+                    alert.setTitle("Restart?");
+                    alert.setMessage("Are you sure to restart game?");
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Toast.makeText(GameActivity.this, "MAX PUAN : "+score, Toast.LENGTH_SHORT).show();
+                            //restart
+                            Intent intent = getIntent();
+                            musicStop();
+                            startActivity(intent);
+                            finish();
+
+                        }
+                    });
+
+                    alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(GameActivity.this, "MAX PUAN : "+score, Toast.LENGTH_SHORT).show();
+                            goLogin();
+                        }
+                    });
+                    alert.show();
 
                 }
             });
 
-            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            alertEarnHeart.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
-                    //Toast.makeText(GameActivity.this, "Game Over!", Toast.LENGTH_SHORT).show();
                     Toast.makeText(GameActivity.this, "MAX PUAN : "+score, Toast.LENGTH_SHORT).show();
                     goLogin();
                 }
             });
-            alert.show();
+            alertEarnHeart.show();
+
 
         }
     }
+
+
+
     private void goLogin() {
         Intent intentLogin = new Intent(GameActivity.this, HomeMenuActivity.class);
         startActivity(intentLogin);
@@ -300,6 +364,150 @@ public class GameActivity extends AppCompatActivity implements ExampleDialogList
     protected void onRestart() {
         super.onRestart();
         musicPlay();
+    }
+    private void translucentStatusBarFlag() {
+        if (Build.VERSION.SDK_INT >= 19) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
+    private void bannerAds() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+    private void InterstitialAds() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-9651456806715960/8157481683");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    }
+    private void openInterstitialAds() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            System.out.println("olmadı ");
+        }
+    }
+    private void seeRewardedAds() {
+        if (rewardedAd.isLoaded()) {
+
+            RewardedAdCallback adCallback = new RewardedAdCallback() {
+                @Override
+                public void onRewardedAdOpened() {
+                    // Ad opened.
+                }
+
+                @Override
+                public void onRewardedAdClosed() {
+                    // Ad closed.
+                }
+
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem reward) {
+                    // User earned reward.
+                }
+
+                @Override
+                public void onRewardedAdFailedToShow(int errorCode) {
+                    // Ad failed to display.
+                }
+            };
+            rewardedAd.show(GameActivity.this, adCallback);
+        } else {
+            Log.d("TAG", "The rewarded ad wasn't loaded yet.");
+        }
+    }
+    private void rewardedAds() {
+        rewardedAd = new RewardedAd(this, "ca-app-pub-9651456806715960/6463759083");
+
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(int errorCode) {
+                // Ad failed to load.
+            }
+        };
+        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+    }
+    private void gameHeartReduce() {
+        if(heart !=0)
+        {
+            heart--;
+            heartShow(heart);
+            sharedPreferences.edit().putInt("heart", heart).apply();
+        }
+
+    }
+    private void heartShow(int heart) {
+        System.out.println("heart show : "+ heart);
+        if(heart == 0)
+        {
+            heart_1.setVisibility(View.INVISIBLE);
+            heart_2.setVisibility(View.INVISIBLE);
+            heart_3.setVisibility(View.INVISIBLE);
+            heart_1_free.setVisibility(View.VISIBLE);
+            heart_2_free.setVisibility(View.VISIBLE);
+            heart_3_free.setVisibility(View.VISIBLE);
+        }
+        else if(heart == 1)
+        {
+            heart_1.setVisibility(View.VISIBLE);
+            heart_2.setVisibility(View.INVISIBLE);
+            heart_3.setVisibility(View.INVISIBLE);
+            heart_1_free.setVisibility(View.INVISIBLE);
+            heart_2_free.setVisibility(View.VISIBLE);
+            heart_3_free.setVisibility(View.VISIBLE);
+        }
+        else if(heart == 2)
+        {
+            heart_1.setVisibility(View.VISIBLE);
+            heart_2.setVisibility(View.VISIBLE);
+            heart_3.setVisibility(View.INVISIBLE);
+            heart_1_free.setVisibility(View.INVISIBLE);
+            heart_2_free.setVisibility(View.INVISIBLE);
+            heart_3_free.setVisibility(View.VISIBLE);
+        }
+        else if(heart == 3)
+        {
+            heart_1.setVisibility(View.VISIBLE);
+            heart_2.setVisibility(View.VISIBLE);
+            heart_3.setVisibility(View.VISIBLE);
+            heart_1_free.setVisibility(View.INVISIBLE);
+            heart_2_free.setVisibility(View.INVISIBLE);
+            heart_3_free.setVisibility(View.INVISIBLE);
+        }
+    }
+    private int wantToEarnHeart(int heart) {
+
+
+        AlertDialog.Builder alertEarnHeart = new AlertDialog.Builder(GameActivity.this);
+        alertEarnHeart.setTitle("Earn Heart");
+        alertEarnHeart.setMessage("Do you want to earn heart?");
+        alertEarnHeart.setCancelable(false);
+        alertEarnHeart.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                seeRewardedAds();
+
+            }
+        });
+
+        alertEarnHeart.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //Toast.makeText(GameActivity.this, "MAX PUAN : "+score, Toast.LENGTH_SHORT).show();
+                //goLogin();
+            }
+        });
+        alertEarnHeart.show();
+        heart += 0;
+        return heart;
     }
 
 }

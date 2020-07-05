@@ -95,5 +95,103 @@
         app:layout_constraintStart_toStartOf="@+id/btnGameStart"
         app:layout_constraintTop_toBottomOf="@+id/btnGameStart" />
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-9651456806715960/3088740414"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnShowTopList"
+        app:layout_constraintStart_toStartOf="@+id/btnShowTopList" />
+
+
+    <ImageView
+        android:id="@+id/heart_1_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/heartred"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/heart_2_image" />
+
+    <ImageView
+        android:id="@+id/heart_3_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/heartred"
+        app:layout_constraintStart_toEndOf="@+id/heart_2_image"
+        app:layout_constraintTop_toBottomOf="@+id/appName" />
+
+    <ImageView
+        android:id="@+id/heart_2_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/heartred"
+        app:layout_constraintStart_toEndOf="@+id/heart_1_image"
+        app:layout_constraintTop_toTopOf="@+id/heart_3_image" />
+    <ImageView
+        android:id="@+id/heart_1_image_free"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/heart_free"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/heart_2_image" />
+
+    <ImageView
+        android:id="@+id/heart_3_image_free"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/heart_free"
+        app:layout_constraintStart_toEndOf="@+id/heart_2_image"
+        app:layout_constraintTop_toBottomOf="@+id/appName" />
+
+    <ImageView
+        android:id="@+id/heart_2_image_free"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        android:src="@drawable/heart_free"
+        app:layout_constraintStart_toEndOf="@+id/heart_1_image"
+        app:layout_constraintTop_toTopOf="@+id/heart_3_image" />
+
+    <Button
+        android:id="@+id/btnEarnHeart"
+        android:layout_width="75dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/ripple_effect_outline"
+        android:text="@string/earn_heart"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/heart_3_image"
+        app:layout_constraintTop_toBottomOf="@+id/appName" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

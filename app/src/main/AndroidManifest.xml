@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9651456806715960~5235804879"/>
         <activity android:name=".Game.ShowMaxScoresActivity"></activity>
         <activity android:name=".Game.GameActivity" />
         <activity android:name=".RegisterAndLogin.WithFacebook.Facebook_RegisterActivity" />
